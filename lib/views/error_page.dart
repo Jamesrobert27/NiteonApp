@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+// import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:niteon/utils/colors.dart';
 import 'package:niteon/utils/images.dart';
 import 'package:niteon/widgets/spacing.dart';
 import 'package:niteon/widgets/text.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 @immutable
 class ErrorPage extends StatefulWidget {
@@ -11,7 +12,7 @@ class ErrorPage extends StatefulWidget {
     Key? key,
     required this.webViewController,
   }) : super(key: key);
-  InAppWebViewController? webViewController;
+  WebViewController? webViewController;
   @override
   _ErrorPageState createState() => _ErrorPageState();
 }
