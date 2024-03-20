@@ -19,70 +19,72 @@ class IntroScreen extends StatefulWidget {
   State<IntroScreen> createState() => _IntroScreenState();
 }
 
-class _IntroScreenState extends State<IntroScreen> {
+class _IntroScreenState extends State<IntroScreen>
+    with SingleTickerProviderStateMixin {
   int currentIndex = 0;
   late PageController _pageController;
+  late TabController _tabController;
   @override
   void initState() {
     setState(() {
       _pageController = PageController();
+      _tabController = TabController(length: 3, vsync: this)
+        ..addListener(() {
+          setState(() {
+            currentIndex = _tabController.index;
+          });
+        });
     });
     super.initState();
   }
 
+  List<Map> onboard = [
+    {
+      'text': 'Welcome to\nNITEON',
+      'subText':
+          'NITEON is a B2B marketplace focused on connecting emerging African businesses',
+      'image': ImageOf.slide1,
+    },
+    {
+      'text': 'No 1. B2B African\nMarketplace',
+      'subText':
+          'Seamlessly Connecting continents and cultures for Business growth to the globalized world economy.',
+      'image': ImageOf.slide2,
+    },
+    {
+      'text': 'Sell On NITEON',
+      'subText':
+          'Become a Seller on Niteon, Meet global Demand. Let’s Revolutionize business together',
+      'image': ImageOf.slide3,
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return PageBackground(
-        body: PageView.builder(
-            controller: _pageController,
-            itemCount: 3,
-            onPageChanged: (int value) {
-              setState(() {
-                currentIndex = value;
-              });
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextOf(
-                      currentIndex == 0
-                          ? "Welcome to\nNITEON"
-                          : currentIndex == 1
-                              ? "No 1. B2B African\nMarketplace"
-                              : "Sell On NITEON",
-                      32,
-                      white,
-                      FontWeight.w600),
-                  YMargin(20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextOf(
-                        currentIndex == 0
-                            ? "NITEON is a B2B marketplace focused on connecting emerging African businesses"
-                            : currentIndex == 1
-                                ? "Seamlessly Connecting continents and cultures for Business growth to the globalized world economy."
-                                : "Become a Seller on Niteon, Meet global Demand. Let’s Revolutionize business together",
-                        14,
-                        white,
-                        FontWeight.w300),
-                  ),
-                  YMargin(30),
-                  currentIndex < 2
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(3, (index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              child: CircleAvatar(
-                                  radius: 10,
-                                  backgroundColor: currentIndex == index
-                                      ? primaryColor
-                                      : primaryColor.withOpacity(0.3)),
-                            );
-                          }))
-                      : ElevatedButton(
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        TabBarView(controller: _tabController, children: [
+          for (var i = 0; i < onboard.length; i++)
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [primaryColor, black],
+                ),
+                image: DecorationImage(
+                  image: AssetImage(onboard[i]['image']),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+        ]),
+        Positioned(
+          bottom: 60,
+          child: currentIndex == 2
+              ? ElevatedButton(
+                  child: TextOf("Explore Now", 20, black, FontWeight.w700),
                           style: ElevatedButton.styleFrom(
                               fixedSize: Size(217, 53),
                               shape: RoundedRectangleBorder(
@@ -98,20 +100,26 @@ class _IntroScreenState extends State<IntroScreen> {
                                   duration: Duration(seconds: 1),
                                   curve: Curves.bounceInOut);
                             }
-                          },
-                          child: TextOf(
-                              "Explore Now", 20, black, FontWeight.w700)),
-                  YMargin(currentIndex < 2 ? 52 : 40),
-                ],
-              );
-            }),
-        background: currentIndex == 0
-            ? ImageOf.slide1
-            : currentIndex == 1
-                ? ImageOf.slide2
-                : currentIndex == 2
-                    ? ImageOf.slide3
-                    : "");
+                  })
+              : Padding(
+                  padding: const EdgeInsets.only(bottom: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(3, (index) {
+                      return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: CircleAvatar(
+                              radius: 10,
+                              backgroundColor: currentIndex == index
+                                  ? primaryColor
+                                  : primaryColor.withOpacity(0.3)));
+                    }),
+                  ),
+                ),
+        )
+      ],
+    );
+
   }
 }
 
