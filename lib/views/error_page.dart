@@ -76,7 +76,7 @@ class _ErrorPageState extends State<ErrorPage> {
                         onTapUp: _tapUp,
                         onTapCancel: _tapCancel,
                         onTap: () {
-                        widget.  webViewController?.reload();
+                          widget.webViewController?.reload();
                         },
                         child: AnimatedContainer(
                           duration: Duration(milliseconds: 200),

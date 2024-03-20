@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, must_be_immutable
 import 'dart:async';
 import 'dart:collection';
+import 'dart:developer';
 import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _WebPageState extends State<WebPage> {
   @override
   void initState() {
     super.initState();
+    log('INIT');
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
@@ -41,19 +43,22 @@ class _WebPageState extends State<WebPage> {
           onProgress: (int progress) {
             // Update loading bar.
           },
-          onPageStarted: (String url) {},
+          onPageStarted: (String url) {
+            // Update address bar.
+          },
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {},
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              return NavigationDecision.prevent;
-            }
-            return NavigationDecision.navigate;
-          },
+          // onNavigationRequest: (NavigationRequest request) {
+          //   if (request.url.startsWith('https://www.youtube.com/')) {
+          //     return NavigationDecision.prevent;
+          //   }
+          //   return NavigationDecision.navigate;
+          // },
         ),
       )
-      ..loadRequest(Uri.parse('https://flutter.dev'));
-
+      ..loadRequest(Uri.parse(siteUrl));
+    log('Loaded');
+    // https: //flutter.dev
     firstTime == true ? siteUrl : () {};
     firstTime = false;
     _connectivitySubscription =
@@ -82,7 +87,9 @@ class _WebPageState extends State<WebPage> {
   bool pageIsLoaded = false;
   double progress = 0;
   // late PullToRefreshController pullToRefreshController;
-  String siteUrl = "https://niteon.co";
+  // String siteUrl = "https://flutter.dev";
+  String siteUrl =
+      "https://stackoverflow.com/questions/61499763/flutter-webview-not-working-for-flutter-web";
   String url = "";
   String downloadUrl = "";
   bool userCanGoBack = false;
@@ -112,11 +119,11 @@ class _WebPageState extends State<WebPage> {
         url: "https://niteon.co/cart"),
     BottomNavItem(
         index: 3,
-        navName: "My Account",
+        navName: "Account",
         iconPath: ImageOf.myAccountIcon,
         url: "https://niteon.co/auth/login"),
   ];
-  
+
   @override
   void dispose() {
     _connectivitySubscription!.cancel();
@@ -310,64 +317,65 @@ class _WebPageState extends State<WebPage> {
                 //     ),
                 //   )
                 // ]),
+                // ),
+                ),
+            bottomNavigationBar: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(color: white),
+              height: 70,
+              padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(
+                top: 5,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: navOptionList
+                    .map((BottomNavItem e) => InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          // loader();
+                          setState(() {
+                            currentIndex = e.index;
+                            // siteUrl = urlLinks[currentIndex];
+                          });
+                          await controller.loadRequest(Uri.parse(e.url));
+                          // await webViewController?.loadUrl(
+                          //     urlRequest: URLRequest(url: Uri.parse(e.url)));
+                        },
+                        child: Container(
+                          width: 65,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ImageIcon(
+                                AssetImage(e.iconPath),
+                                color: currentIndex == e.index
+                                    ? black
+                                    : Colors.grey.shade500,
+                              ),
+                              const YMargin(7),
+                              TextOf(
+                                e.navName,
+                                12,
+                                currentIndex == e.index
+                                    ? black
+                                    : Colors.grey.shade500,
+                                FontWeight.w400,
+                              )
+                            ],
+                          ),
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                          decoration: BoxDecoration(
+                              color: currentIndex == e.index
+                                  ? Color(0xffF4840C)
+                                  : white,
+                              borderRadius: BorderRadius.circular(10)),
+                        )))
+                    .toList(),
+              ),
             ),
-            // bottomNavigationBar:
-            //  Container(
-            //   width: double.infinity,
-            //   decoration: BoxDecoration(color: white),
-            //   height: 70,
-            //   padding:
-            //       const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 5),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: navOptionList
-            //         .map((BottomNavItem e) => InkWell(
-            //             splashColor: Colors.transparent,
-            //             highlightColor: Colors.transparent,
-            //             onTap: () async {
-            //               loader();
-            //               setState(() {
-            //                 currentIndex = e.index;
-            //                 // siteUrl = urlLinks[currentIndex];
-            //               });
-            //               // await webViewController?.loadUrl(
-            //               //     urlRequest: URLRequest(url: Uri.parse(e.url)));
-            //             },
-            //             child: Container(
-            //               width: 65,
-            //               child: Column(
-            //                 mainAxisAlignment: MainAxisAlignment.center,
-            //                 children: [
-            //                   ImageIcon(
-            //                     AssetImage(e.iconPath),
-            //                     color: currentIndex == e.index
-            //                         ? black
-            //                         : Colors.grey.shade500,
-            //                   ),
-            //                   const YMargin(7),
-            //                   TextOf(
-            //                     e.navName,
-            //                     8,
-            //                     currentIndex == e.index
-            //                         ? black
-            //                         : Colors.grey.shade500,
-            //                     FontWeight.w400,
-            //                   )
-            //                 ],
-            //               ),
-            //               margin: EdgeInsets.symmetric(vertical: 5),
-            //               padding:
-            //                   EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-            //               decoration: BoxDecoration(
-            //                   color: currentIndex == e.index
-            //                       ? Color(0xffF4840C)
-            //                       : white,
-            //                   borderRadius: BorderRadius.circular(10)),
-            //             )))
-            //         .toList(),
-            //   ),
-            // ),
-        
           )
         : ErrorPage(webViewController: controller);
   }
@@ -405,7 +413,6 @@ class _WebPageState extends State<WebPage> {
               ),
             ));
   }
-
 }
 
 class BottomNavItem {
