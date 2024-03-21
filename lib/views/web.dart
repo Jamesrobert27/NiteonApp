@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:niteon/utils/colors.dart';
 import 'package:niteon/utils/images.dart';
 import 'package:niteon/views/error_page.dart';
+import 'package:niteon/views/loading.dart';
 import 'package:niteon/widgets/spacing.dart';
 import 'package:niteon/widgets/text.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -32,20 +33,27 @@ class _WebPageState extends State<WebPage> {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
+      // ..loadFile()
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-            // Update loading bar.
+         
           },
+        
           onPageStarted: (String url) {
-            // Update address bar.
+   
+            showLoader();
+        
+
           },
-          onPageFinished: (String url) {},
-          onWebResourceError: (WebResourceError error) {},   
+          onPageFinished: (String url) {
+            hideLoader();
+          },
+          onWebResourceError: (WebResourceError error) {},
         ),
       )
       ..loadRequest(Uri.parse(siteUrl));
-    log('Loaded');
+   
     // https: //flutter.dev
     firstTime == true ? siteUrl : () {};
     firstTime = false;
@@ -59,6 +67,7 @@ class _WebPageState extends State<WebPage> {
       _connectionResult = result;
     });
   }
+
   bool pageIsLoaded = false;
   double progress = 0;
   // late PullToRefreshController pullToRefreshController;
@@ -112,7 +121,6 @@ class _WebPageState extends State<WebPage> {
 
   @override
   Widget build(BuildContext context) {
-  
     return (_connectionResult == ConnectivityResult.mobile ||
             _connectionResult == ConnectivityResult.wifi)
         ? Scaffold(
@@ -122,7 +130,6 @@ class _WebPageState extends State<WebPage> {
                 controller: controller,
               ),
             ),
-       
             bottomNavigationBar: Container(
               width: double.infinity,
               decoration: BoxDecoration(color: white),
@@ -137,11 +144,14 @@ class _WebPageState extends State<WebPage> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onTap: () async {
+                          showLoader();
                           setState(() {
                             currentIndex = e.index;
                           });
+                          // controller
                           await controller.loadRequest(Uri.parse(e.url));
-             
+                          hideLoader();
+
                         },
                         child: Container(
                           width: 65,
@@ -180,8 +190,6 @@ class _WebPageState extends State<WebPage> {
           )
         : ErrorPage(webViewController: controller);
   }
-
-
 }
 
 class BottomNavItem {

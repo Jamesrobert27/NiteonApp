@@ -17,6 +17,7 @@ class ErrorPage extends StatefulWidget {
   _ErrorPageState createState() => _ErrorPageState();
 }
 
+
 class _ErrorPageState extends State<ErrorPage> {
   double _width = 400.0;
   double _height = 50.0;
