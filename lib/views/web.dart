@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
 import 'package:niteon/utils/colors.dart';
 import 'package:niteon/utils/images.dart';
 import 'package:niteon/views/error_page.dart';
@@ -36,15 +37,9 @@ class _WebPageState extends State<WebPage> {
       // ..loadFile()
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (int progress) {
-         
-          },
-        
+          onProgress: (int progress) {},
           onPageStarted: (String url) {
-   
             showLoader();
-        
-
           },
           onPageFinished: (String url) {
             hideLoader();
@@ -53,7 +48,7 @@ class _WebPageState extends State<WebPage> {
         ),
       )
       ..loadRequest(Uri.parse(siteUrl));
-   
+
     // https: //flutter.dev
     firstTime == true ? siteUrl : () {};
     firstTime = false;
@@ -121,74 +116,85 @@ class _WebPageState extends State<WebPage> {
 
   @override
   Widget build(BuildContext context) {
-    return (_connectionResult == ConnectivityResult.mobile ||
-            _connectionResult == ConnectivityResult.wifi)
-        ? Scaffold(
-            backgroundColor: Colors.white,
-            body: SafeArea(
-              child: WebViewWidget(
-                controller: controller,
-              ),
-            ),
-            bottomNavigationBar: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(color: white),
-              height: 70,
-              padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(
-                top: 5,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: navOptionList
-                    .map((BottomNavItem e) => InkWell(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          showLoader();
-                          setState(() {
-                            currentIndex = e.index;
-                          });
-                          // controller
-                          await controller.loadRequest(Uri.parse(e.url));
-                          hideLoader();
-
-                        },
-                        child: Container(
-                          width: 65,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ImageIcon(
-                                AssetImage(e.iconPath),
-                                color: currentIndex == e.index
-                                    ? black
-                                    : Colors.grey.shade500,
-                              ),
-                              const YMargin(7),
-                              TextOf(
-                                e.navName,
-                                12,
-                                currentIndex == e.index
-                                    ? black
-                                    : Colors.grey.shade500,
-                                FontWeight.w400,
-                              )
-                            ],
-                          ),
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                          decoration: BoxDecoration(
-                              color: currentIndex == e.index
-                                  ? Color(0xffF4840C)
-                                  : white,
-                              borderRadius: BorderRadius.circular(10)),
-                        )))
-                    .toList(),
-              ),
-            ),
-          )
-        : ErrorPage(webViewController: controller);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarBrightness: Brightness.dark,
+    ));
+    // WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //   if (_connectionResult != ConnectivityResult.mobile ||
+    //       _connectionResult != ConnectivityResult.wifi) {
+    //     showLoader();
+    //   } else {
+    //     hideLoader();
+    //   }
+    // });
+    return Scaffold(
+      backgroundColor: Colors.white,
+      // extendBodyBehindAppBar: true,
+      // extendBody: true,
+      // appBar: AppBar(),
+      body: SafeArea(
+        child: WebViewWidget(
+          controller: controller,
+        ),
+      ),
+      bottomNavigationBar: Container(
+        width: double.infinity,
+        // margin: Edge,
+        decoration: BoxDecoration(color: white),
+        height: 70,
+        padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(
+          top: 5,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: navOptionList
+              .map((BottomNavItem e) => InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    showLoader();
+                    setState(() {
+                      currentIndex = e.index;
+                    });
+                    // controller
+                    await controller.loadRequest(Uri.parse(e.url));
+                    hideLoader();
+                  },
+                  child: Container(
+                    width: 65,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ImageIcon(
+                          AssetImage(e.iconPath),
+                          color: currentIndex == e.index
+                              ? black
+                              : Colors.grey.shade500,
+                        ),
+                        const YMargin(7),
+                        TextOf(
+                          e.navName,
+                          12,
+                          currentIndex == e.index
+                              ? black
+                              : Colors.grey.shade500,
+                          FontWeight.w400,
+                        )
+                      ],
+                    ),
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                    decoration: BoxDecoration(
+                        color:
+                            currentIndex == e.index ? Color(0xffF4840C) : white,
+                        borderRadius: BorderRadius.circular(10)),
+                  )))
+              .toList(),
+        ),
+      ),
+    );
+    // : ErrorPage(webViewController: controller);
   }
 }
 

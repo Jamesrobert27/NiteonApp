@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable
 
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; 
 import 'package:hive/hive.dart'; 
 import 'package:niteon/utils/colors.dart';
 import 'package:niteon/utils/constants.dart';
@@ -39,6 +40,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarBrightness: Brightness.dark,
+    ));
     return Scaffold(
       backgroundColor: white,
       body: Center(

@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors_in_immutables
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:niteon/utils/images.dart';
 import 'package:niteon/utils/colors.dart';
@@ -21,7 +22,9 @@ class IntroScreen extends StatefulWidget {
 
 class _IntroScreenState extends State<IntroScreen>
     with SingleTickerProviderStateMixin {
+      
   int currentIndex = 0;
+
   late PageController _pageController;
   late TabController _tabController;
   @override
@@ -61,6 +64,10 @@ class _IntroScreenState extends State<IntroScreen>
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarBrightness: Brightness.dark,
+    ));
     return Stack(
       alignment: Alignment.center,
       children: [
