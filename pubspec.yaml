@@ -46,3 +46,9 @@ flutter:
 
   assets:
    - assets/images/
+  fonts:
+  - family: SFPRODISPLAY
+    fonts:
+      - asset: fonts/SFPRODISPLAYBOLD.OTF
+      - asset: fonts/SFPRODISPLAYMEDIUM.OTF
+      - asset: fonts/SFPRODISPLAYREGULAR.OTF

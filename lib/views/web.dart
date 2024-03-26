@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:niteon/utils/colors.dart';
 import 'package:niteon/utils/images.dart';
 import 'package:niteon/views/error_page.dart';
@@ -30,11 +31,10 @@ class _WebPageState extends State<WebPage> {
   @override
   void initState() {
     super.initState();
-    log('INIT');
+
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
-      // ..loadFile()
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {},
@@ -42,14 +42,13 @@ class _WebPageState extends State<WebPage> {
             showLoader();
           },
           onPageFinished: (String url) {
-            // hideLoader();
+            hideLoader();
           },
           onWebResourceError: (WebResourceError error) {},
         ),
       )
       ..loadRequest(Uri.parse(siteUrl));
 
-    // https: //flutter.dev
     firstTime == true ? siteUrl : () {};
     firstTime = false;
     _connectivitySubscription =
@@ -65,8 +64,6 @@ class _WebPageState extends State<WebPage> {
 
   bool pageIsLoaded = false;
   double progress = 0;
-  // late PullToRefreshController pullToRefreshController;
-  // String siteUrl = "https://flutter.dev";
   String siteUrl = "https://niteon.co";
   String url = "";
   String downloadUrl = "";
@@ -82,7 +79,7 @@ class _WebPageState extends State<WebPage> {
     BottomNavItem(
         index: 0,
         navName: "Home",
-        iconPath: ImageOf.homeIcon,
+        // iconPath: ImageOf.homeIcon,
         url: "https://niteon.co"),
     BottomNavItem(
         index: 1,
@@ -97,7 +94,7 @@ class _WebPageState extends State<WebPage> {
     BottomNavItem(
         index: 3,
         navName: "Account",
-        iconPath: ImageOf.myAccountIcon,
+        // iconPath: ImageOf.myAccountIcon,
         url: "https://niteon.co/auth/login"),
   ];
 
@@ -130,9 +127,6 @@ class _WebPageState extends State<WebPage> {
     // });
     return Scaffold(
       backgroundColor: Colors.white,
-      // extendBodyBehindAppBar: true,
-      // extendBody: true,
-      // appBar: AppBar(),
       body: SafeArea(
         child: WebViewWidget(
           controller: controller,
@@ -157,38 +151,46 @@ class _WebPageState extends State<WebPage> {
                     setState(() {
                       currentIndex = e.index;
                     });
-                    // controller
+              
                     await controller.loadRequest(Uri.parse(e.url));
-                    // hideLoader();
+                  
                   },
-                  child: Container(
-                    width: 65,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ImageIcon(
-                          AssetImage(e.iconPath),
-                          color: currentIndex == e.index
-                              ? black
-                              : Colors.grey.shade500,
-                        ),
-                        const YMargin(7),
-                        TextOf(
-                          e.navName,
-                          12,
-                          currentIndex == e.index
-                              ? black
-                              : Colors.grey.shade500,
-                          FontWeight.w400,
-                        )
-                      ],
-                    ),
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    padding: EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                    decoration: BoxDecoration(
-                        color:
-                            currentIndex == e.index ? Color(0xffF4840C) : white,
-                        borderRadius: BorderRadius.circular(10)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    
+                      e.index == 0
+                          ? Icon(
+                              Iconsax.home,
+                              color: currentIndex == e.index
+                                  ? primaryColor
+                                  : Colors.grey.shade500,
+                            )
+                          : e.index == 3
+                              ? Icon(
+                                  Iconsax.user,
+                                  color: currentIndex == e.index
+                                      ? primaryColor
+                                      : Colors.grey.shade500,
+                                )
+                              : Image.asset(
+                                  e.iconPath!,
+                                  height: 25,
+                                  width: 25,
+                                  color: currentIndex == e.index
+                                      ? primaryColor
+                                      : Colors.grey.shade500,
+                                ),
+                      const YMargin(7),
+                      TextOf(
+                        e.navName,
+                        12,
+                        currentIndex == e.index
+                            ? primaryColor
+                            : Colors.grey.shade500,
+                        FontWeight.w500,
+                      )
+                    ],
                   )))
               .toList(),
         ),
@@ -202,9 +204,10 @@ class BottomNavItem {
   BottomNavItem(
       {required this.index,
       required this.navName,
-      required this.iconPath,
+      this.iconPath,
       required this.url});
 
   int index;
-  String iconPath, navName, url;
+  String? iconPath;
+  String navName, url;
 }

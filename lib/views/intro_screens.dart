@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors_in_immutables
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:niteon/utils/images.dart';
 import 'package:niteon/utils/colors.dart';
@@ -74,6 +75,8 @@ class _IntroScreenState extends State<IntroScreen>
         TabBarView(controller: _tabController, children: [
           for (var i = 0; i < onboard.length; i++)
             Container(
+              padding: EdgeInsets.only(
+                  bottom: Get.height * .17, left: 20, right: 20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -85,29 +88,43 @@ class _IntroScreenState extends State<IntroScreen>
                   fit: BoxFit.cover,
                 ),
               ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextOf(onboard[i]['text'], 28, white, FontWeight.w600),
+                  YMargin(16),
+                  TextOf(onboard[i]['subText'], 15, white, FontWeight.w400),
+                ],
+              ),
             ),
         ]),
         Positioned(
           bottom: 60,
           child: currentIndex == 2
-              ? ElevatedButton(
-                  child: TextOf("Explore Now", 20, black, FontWeight.w700),
-                          style: ElevatedButton.styleFrom(
-                              fixedSize: Size(217, 53),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: primaryColor),
-                          onPressed: () {
-                            if (currentIndex == 2) {
-                              setRecognizedUser();
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, WebPage.webPage, (route) => false);
-                            } else {
-                              _pageController.animateToPage(currentIndex + 1,
-                                  duration: Duration(seconds: 1),
-                                  curve: Curves.bounceInOut);
-                            }
-                  })
+              ? SizedBox(
+                  height: 50,
+                  width: Get.width * .4,
+                  child: ElevatedButton(
+                      child: TextOf("Explore Now", 20, black, FontWeight.w500),
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                       
+                          fixedSize: Size(217, 53),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          backgroundColor: primaryColor),
+                      onPressed: () {
+                        if (currentIndex == 2) {
+                          setRecognizedUser();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, WebPage.webPage, (route) => false);
+                        } else {
+                          _pageController.animateToPage(currentIndex + 1,
+                              duration: Duration(seconds: 1),
+                              curve: Curves.bounceInOut);
+                        }
+                      }),
+                )
               : Padding(
                   padding: const EdgeInsets.only(bottom: 30),
                   child: Row(

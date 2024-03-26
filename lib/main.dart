@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         useMaterial3: true,
+        fontFamily: 'SFPRODISPLAY',
        
       ),
       builder: BotToastInit(), //1. call BotToastInit

@@ -5,9 +5,8 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:niteon/utils/colors.dart';
 
 void showLoader() {
-  // authRepo.isDialogShowing = true;
   Get.dialog(
-    barrierColor: const Color.fromARGB(255, 45, 44, 44),
+    barrierColor: Colors.white,
     barrierDismissible: false,
     Column(
       mainAxisSize: MainAxisSize.min,
@@ -19,8 +18,6 @@ void showLoader() {
 
 // Hide Loader
 void hideLoader() {
-  // authRepo.isDialogShowing = false;
-  // Navigator.of(context).pop();
   Get.back();
 }
 
@@ -44,9 +41,6 @@ class _InfiniteAnimationState extends State<InfiniteAnimation>
       duration: Duration(seconds: 2),
     );
     animation = Tween<double>(
-      //   begin: 0,
-      //   end: 12.5664, // 2Radians (360 degrees)
-      // ).animate(animationController);
       begin: 0.0,
       end: 6.34,
     ).animate(CurvedAnimation(
@@ -54,37 +48,27 @@ class _InfiniteAnimationState extends State<InfiniteAnimation>
       curve: Curves.fastOutSlowIn,
     ));
     animationController.forward();
-
     animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         animationController.repeat();
       }
     });
-    // animationController = AnimationController(
-    //   vsync: this,
-    //   duration: Duration(seconds: 1),
-    // )
-    //   ..forward()
-    //   ..repeat(reverse: true);
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animationController,
-      builder: (context, child) =>
-          // Transform.rotate(
-          //   angle: animation.value,
-          //   child:
-          CircleAvatar(
-        radius: 30,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            'assets/images/app_icon.png',
-          ),
+      builder: (context, child) => 
+      Transform.rotate(
+        angle: animation.value,
+        // scaleX: animation.value / 3,
+        // scaleY: animation.value / 3,
+        child: Image.asset(
+          'assets/images/app_icon.png',
+          height: 80,
+          width: 80,
         ),
-        // ),
       ),
     );
   }

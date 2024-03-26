@@ -9,7 +9,11 @@ class ImageOf {
   static String slide1 = imageName("slide1");
   static String slide3 = imageName("slide3");
   static String homeIcon = imageName("home_icon");
-  static String shopIcon = imageName("shop_icon");
-  static String cartIcon = imageName("cart_icon");
+  static String shopIcon = imageName(
+    "shop",
+  );
+  static String cartIcon = imageName(
+    "cart",
+  );
   static String myAccountIcon = imageName("my_account");
 }
