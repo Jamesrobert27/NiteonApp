@@ -7,43 +7,12 @@ import 'package:niteon/utils/colors.dart';
 void showLoader() {
   // authRepo.isDialogShowing = true;
   Get.dialog(
-    barrierColor: Colors.black.withOpacity(.8),
+    barrierColor: const Color.fromARGB(255, 45, 44, 44),
     barrierDismissible: false,
     Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(
-          height: 130,
-          width: 130,
-          child: LoadingIndicator(
-            indicatorType: Indicator.ballClipRotateMultiple,
-            colors: [Colors.white],
-            strokeWidth: 2,
-            pathBackgroundColor:
-                //  showPathBackground ?
-                Colors.black45,
-            // : null,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-void linearLoader() {
-  // authRepo.isDialogShowing = true;
-  Get.dialog(
-    barrierColor: Colors.black.withOpacity(.8),
-    Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        LinearProgressIndicator(
-          backgroundColor: primaryColor,
-          valueColor: AlwaysStoppedAnimation<Color>(white),
-        ),
-      ],
+      children: [InfiniteAnimation()],
     ),
   );
 }
@@ -55,39 +24,75 @@ void hideLoader() {
   Get.back();
 }
 
-class OverlayLoader extends StatelessWidget {
-  final Scaffold child;
-  final bool isLoading;
-  const OverlayLoader({
-    super.key,
-    required this.child,
-    this.isLoading = false,
-  });
+class InfiniteAnimation extends StatefulWidget {
+  InfiniteAnimation();
+
+  @override
+  _InfiniteAnimationState createState() => _InfiniteAnimationState();
+}
+
+class _InfiniteAnimationState extends State<InfiniteAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    );
+    animation = Tween<double>(
+      //   begin: 0,
+      //   end: 12.5664, // 2Radians (360 degrees)
+      // ).animate(animationController);
+      begin: 0.0,
+      end: 6.34,
+    ).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.fastOutSlowIn,
+    ));
+    animationController.forward();
+
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animationController.repeat();
+      }
+    });
+    // animationController = AnimationController(
+    //   vsync: this,
+    //   duration: Duration(seconds: 1),
+    // )
+    //   ..forward()
+    //   ..repeat(reverse: true);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
-        children: [
-          child,
-          if (isLoading)
-            Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.9),
-                child: Column(
-                  children: [
-                    LinearProgressIndicator(
-                      backgroundColor: white,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        primaryColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-        ],
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (context, child) =>
+          // Transform.rotate(
+          //   angle: animation.value,
+          //   child:
+          CircleAvatar(
+        radius: 30,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.asset(
+            'assets/images/app_icon.png',
+          ),
+        ),
+        // ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+
+    super.dispose();
   }
 }

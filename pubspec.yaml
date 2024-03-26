@@ -21,6 +21,8 @@ dependencies:
   connectivity_plus: ^4.0.2
   loading_animation_widget: ^1.2.1
   webview_flutter: ^4.7.0
+  iconly:
+  iconsax:
   loading_indicator: ^3.1.1
 
 

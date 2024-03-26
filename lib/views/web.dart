@@ -42,7 +42,7 @@ class _WebPageState extends State<WebPage> {
             showLoader();
           },
           onPageFinished: (String url) {
-            hideLoader();
+            // hideLoader();
           },
           onWebResourceError: (WebResourceError error) {},
         ),
@@ -159,7 +159,7 @@ class _WebPageState extends State<WebPage> {
                     });
                     // controller
                     await controller.loadRequest(Uri.parse(e.url));
-                    hideLoader();
+                    // hideLoader();
                   },
                   child: Container(
                     width: 65,
