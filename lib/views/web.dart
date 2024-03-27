@@ -151,14 +151,11 @@ class _WebPageState extends State<WebPage> {
                     setState(() {
                       currentIndex = e.index;
                     });
-              
                     await controller.loadRequest(Uri.parse(e.url));
-                  
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                    
                       e.index == 0
                           ? Icon(
                               Iconsax.home,
