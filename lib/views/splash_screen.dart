@@ -29,8 +29,10 @@ class _SplashScreenState extends State<SplashScreen>
     print(recognized);
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushNamedAndRemoveUntil(
-          context, 
-          recognized == false ? IntroScreen.introScreen : WebPage.webPage,
+          context,
+          // recognized == false ?
+          IntroScreen.introScreen,
+          // : WebPage.webPage,
           (route) => false);
     });
   }
@@ -49,7 +51,6 @@ class _SplashScreenState extends State<SplashScreen>
     animationController.forward();
   }
 
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -67,13 +68,11 @@ class _SplashScreenState extends State<SplashScreen>
           width: Get.width,
           height: Get.height,
           child: Image.asset(
-         
             'assets/images/splash.png',
             fit: BoxFit.fitHeight,
           ),
         ),
       ),
-          
     );
   }
 }

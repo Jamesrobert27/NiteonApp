@@ -46,19 +46,19 @@ class _IntroScreenState extends State<IntroScreen>
     {
       'text': 'Welcome to\nNITEON',
       'subText':
-          'NITEON is a B2B marketplace focused on connecting emerging African businesses',
+          'B2B Marketplace connecting African manufacturers to the global Market.',
       'image': ImageOf.slide1,
     },
     {
       'text': 'No 1. B2B African\nMarketplace',
       'subText':
-          'Seamlessly Connecting continents and cultures for Business growth to the globalized world economy.',
+          'Driven by Quality, Innovation, People and Sustainability as the African Trade Center.',
       'image': ImageOf.slide2,
     },
     {
       'text': 'Sell On NITEON',
       'subText':
-          'Become a Seller on Niteon, Meet global Demand. Let’s Revolutionize business together',
+          'Access Production Credit, Multiple Payment Option, Escrow protection and personalized AI Experience',
       'image': ImageOf.slide3,
     },
   ];
