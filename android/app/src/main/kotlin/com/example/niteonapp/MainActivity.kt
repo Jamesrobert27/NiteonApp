@@ -1,4 +1,4 @@
-package com.example.niteonapp
+package com.niteonapp.app
 
 import io.flutter.embedding.android.FlutterActivity
 

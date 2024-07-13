@@ -95,7 +95,9 @@ class _WebPageState extends State<WebPage> {
         index: 3,
         navName: "Account",
         // iconPath: ImageOf.myAccountIcon,
-        url: "https://niteon.co/auth/login"),
+        url: 'https://niteon.co/profile'
+        //  "https://niteon.co/auth/login"
+        ),
   ];
 
   @override

@@ -2,7 +2,7 @@ name: niteon
 description: A new Flutter project.
 
 publish_to: 'none'
-version: 1.0.0+3
+5version: 1.0.1+5
 
 environment:
   sdk: ">=2.17.3 <3.0.0"
@@ -16,6 +16,7 @@ dependencies:
   get: ^4.6.5
   flutter_launcher_icons: ^0.13.0
   google_fonts: ^5.1.0
+  hive_flutter: ^1.1.0
   hive: ^2.2.3
   flutter_svg: ^2.0.4
   connectivity_plus: ^4.0.2

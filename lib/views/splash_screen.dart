@@ -30,9 +30,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushNamedAndRemoveUntil(
           context,
-          // recognized == false ?
-          IntroScreen.introScreen,
-          // : WebPage.webPage,
+          recognized == false ? IntroScreen.introScreen : WebPage.webPage,
           (route) => false);
     });
   }
@@ -49,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
       duration: Duration(seconds: 2),
     );
     animationController.forward();
+    super.initState();
   }
 
   @override
